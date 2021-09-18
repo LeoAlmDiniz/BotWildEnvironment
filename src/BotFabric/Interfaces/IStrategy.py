@@ -7,5 +7,9 @@ class IStrategy(ABC):
     def getName(self):
         raise NotImplementedError
 
+    @abstractmethod
+    def longestPeriod(self):
+        raise NotImplementedError
+
 
 

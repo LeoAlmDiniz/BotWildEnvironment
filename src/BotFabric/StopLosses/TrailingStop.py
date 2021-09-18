@@ -1,11 +1,11 @@
-from src.Enums.StopLosses import StopLosses
+from src.BotFabric.Enums.StopLossesIDs import StopLossesIDs
 from src.BotFabric.Interfaces.IStopLoss import IStopLoss
 
 
 class TrailingStop(IStopLoss):
 
     def __init__(self, gap):
-        self.name = StopLosses.TRAILINGSTOP
+        self.name = StopLossesIDs.TRAILINGSTOP
         self.gap = gap
 
     def getName(self):
