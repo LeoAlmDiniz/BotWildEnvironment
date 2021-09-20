@@ -2,11 +2,12 @@ from src.BotFabric.Enums.StrategiesIDs import StrategiesIDs
 from src.BotFabric.Interfaces.IStrategy import IStrategy
 
 
-class MA2(IStrategy):
+class EMA3(IStrategy):
 
-    def __init__(self, fastPeriod=12, slowPeriod=26):
-        self.name = StrategiesIDs.MA2
+    def __init__(self, fastPeriod=13, neutralPeriod=21, slowPeriod=34):
+        self.name = StrategiesIDs.MA3
         self.fastPeriod = fastPeriod
+        self.neutralPeriod = neutralPeriod
         self.slowPeriod = slowPeriod
 
     def getName(self):

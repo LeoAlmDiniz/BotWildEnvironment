@@ -1,3 +1,5 @@
+import sys
+
 
 def main(resetContext=True):
     # ctx = WBEContext(resetContext)
@@ -8,10 +10,7 @@ def main(resetContext=True):
     list = [None]*200
     list.insert(0, 256)
     list.pop()
-    print(len(list))
-    print(list)
-    print(len(list))
-
+    print(sys.maxsize)
 
 if __name__ == '__main__':
     main()

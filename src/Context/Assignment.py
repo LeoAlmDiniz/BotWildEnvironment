@@ -3,13 +3,12 @@ from src.AssetsAndTimeframes.Timeframes import Timeframes
 from src.Markets.MarketIDs import MarketIDs
 
 
-class Market:
+class Assignment:
 
     def __init__(self,
-                 name: MarketIDs,
-                 timeframe: Timeframes,
-                 asset: Assets):
-        self.name = name
-        self.timeframe = timeframe
+                 market: MarketIDs,
+                 asset: Assets,
+                 timeframe: Timeframes):
+        self.market = market
         self.asset = asset
-
+        self.timeframe = timeframe

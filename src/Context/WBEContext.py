@@ -1,24 +1,26 @@
-from src.Context.ActiveBots import ActiveBots
+from src.Context import ContextConfig0
 
 
 class WBEContext:
 
     def __init__(self, resetContext):
-        self.activeBots = ActiveBots()
-        self.marketReaders = {}
+        self.bots = []
+        #Bot => [MARKET, ASSET, TF]
         if resetContext:
-            self.resetActiveBots()
+            self.bots = ContextConfig0.getInitialConfig()
         else:
-            self.recoverActiveBots()
+            self.recoverBotsInMarkets()
 
     def run(self):
         pass
 
-    def recoverActiveBots(self):
-        # we will keep a backup of ActiveBots through pickle module
+    def recoverBotsInMarkets(self):
         pass
 
-    def resetActiveBots(self):
+    def resetActiveBotsState(self):
+        pass
+
+    def recoverActiveBotsState(self):
         pass
 
     def createMarketReaders(self):

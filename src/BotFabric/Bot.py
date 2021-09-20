@@ -8,8 +8,8 @@ from src.BotFabric.Errors.IncompatibleBotError import IncompatibleBotException
 from src.BotFabric.Interfaces.IStopLoss import IStopLoss
 from src.BotFabric.Interfaces.IStrategy import IStrategy
 from src.BotFabric.Interfaces.IExitTrigger import IExitTrigger
-
 import uuid
+from src.Context.Assignment import Assignment
 
 
 class Bot:
@@ -30,6 +30,7 @@ class Bot:
         self.stopLossType = stopLossType
         self.exitTrigger = exitTrigger
         self.maxPyramiding = maxPyramiding
+        self.assignmentList = []
         self.dataset = [None]*max(strategy.longestPeriod(), biasStrategy.longestPeriod())
         self.action = Actions.PASS
         self.score = 0
@@ -61,6 +62,9 @@ class Bot:
 
     def getMaxPyramiding(self, value) -> int:
         return self.maxPyramiding
+
+    def assignTask(self, assignment: Assignment):
+        self.assignmentList.append(assignment)
 
     def datasetSize(self) -> int:
         return len(self.dataset)
