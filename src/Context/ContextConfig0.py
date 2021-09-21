@@ -183,6 +183,6 @@ def getInitialConfig() -> list:
             assignment = Assignment(market=assignmentArgs["market"],
                                     asset=assignmentArgs["asset"],
                                     timeframe=assignmentArgs["timeframe"])
-            bot.assignTask(assignment)
+            bot.assign(assignment)
         output.append(bot)
     return output

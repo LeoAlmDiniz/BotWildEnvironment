@@ -9,8 +9,11 @@ class MA2(IStrategy):
         self.fastPeriod = fastPeriod
         self.slowPeriod = slowPeriod
 
-    def getName(self):
+    def getName(self) -> StrategiesIDs:
         return self.name
+
+    def setBiasStrategy(self, strategy: IStrategy):
+        self.biasStrategy = strategy
 
     def longestPeriod(self):
         return max(self.slowPeriod, 1)

@@ -1,7 +1,11 @@
 from typing import Union
 
+from numpy import NaN
+
 from src.BotFabric.Enums.Actions import Actions
 from src.BotFabric.Enums.ExitTriggersIDs import ExitTriggersIDs
+from src.BotFabric.Enums.Biases import Biases
+from src.BotFabric.Enums.Orders import Orders
 from src.BotFabric.Enums.StopLossesIDs import StopLossesIDs
 from src.BotFabric.Enums.StrategiesIDs import StrategiesIDs
 from src.BotFabric.Errors.IncompatibleBotError import IncompatibleBotException
@@ -16,68 +20,54 @@ class Bot:
 
     def __init__(self, strategy: IStrategy,
                  biased: bool,
-                 biasStrategy: IStrategy,
+                 biasStrategy: Union[None, IStrategy],
                  stopLossType: IStopLoss,
                  exitTrigger: IExitTrigger,
                  maxPyramiding: int):
+
+        # BLUEPRINT
         self.guid = uuid.uuid4()
         self.strategy = strategy
         self.biased = biased  # LER OBSERVACAO 1
         if self.biased:
-            self.biasStrategy = biasStrategy
-        else:
-            self.biasStrategy = None
+            self.strategy.setBiasStrategy(biasStrategy)
         self.stopLossType = stopLossType
         self.exitTrigger = exitTrigger
         self.maxPyramiding = maxPyramiding
         self.assignmentList = []
-        self.dataset = [None]*max(strategy.longestPeriod(), biasStrategy.longestPeriod())
+
+        # OPERATION
+        self.dataset = [NaN] * max(strategy.longestPeriod(), biasStrategy.longestPeriod())
+        self.orderCount = 0
         self.action = Actions.PASS
+
+        # SCORE
         self.score = 0
         self.unrealisedBalance = 0
         self.maxUnrealisedLoss = 0
         self.maxDrawdown = 0
+
+        # ERROR TREATMENT
         self.applyRestrictions()
 
-    def applyRestrictions(self):
-        if self.strategy.getName() == StrategiesIDs.GRID and self.exitTrigger.getName() != ExitTriggersIDs.NO_EXIT:
-            raise IncompatibleBotException("Grid bots can only be instantited with exitTrigger of the type NO_EXIT")
-        elif self.strategy.getName() == StrategiesIDs.GRID and self.stopLossType.getName() != StopLossesIDs.NO_STOP:
-            raise IncompatibleBotException("Grid bots should have stopLossType always set as NO_STOP")
-
-    def getGuid(self) -> uuid:
-        return self.guid
-
-    def getStrategy(self) -> IStrategy:
-        return self.strategy
-
-    def hasBias(self) -> bool:
-        return self.biased
-
-    def getStopLossType(self, value) -> IStopLoss:
-        return self.stopLossType
-
-    def getExitTrigger(self, value) -> IExitTrigger:
-        return self.exitTrigger
-
-    def getMaxPyramiding(self, value) -> int:
-        return self.maxPyramiding
-
-    def assignTask(self, assignment: Assignment):
-        self.assignmentList.append(assignment)
+    # BLUEPRINT
 
     def datasetSize(self) -> int:
         return len(self.dataset)
 
-    def updateDataset(self, value: Union[float, None]):
+    def assign(self, assignment: Assignment):
+        self.assignmentList.append(assignment)
+
+    # OPERATION
+
+    def update(self, value: Union[float, None]):
         self.dataset.insert(0, value)
         self.dataset.pop()
+        self.strategy.update(self.dataset)
+        if self.biased:
+            self.strategy.biasStrategy.update(self.dataset)
 
-    def getAction(self) -> Actions:
-        return self.action
-
-    def setAction(self, value: Actions):
-        self.action = value
+    # SCORE
 
     def getScore(self) -> float:
         return self.score
@@ -103,6 +93,18 @@ class Bot:
     def setMaxDrawdown(self, value: float):
         self.maxDrawdown = value
 
+    # ERROR TREATMENT
+
+    def applyRestrictions(self):
+        if self.strategy is None:
+            raise IncompatibleBotException(self, "Cannot create a Bot without strategy")
+        if self.biased and self.strategy.biasStrategy is None:
+            raise IncompatibleBotException(self, "Cannot create a biased Bot without biasStrategy")
+        if self.strategy.getName() == StrategiesIDs.GRID and self.exitTrigger.getName() != ExitTriggersIDs.NO_EXIT:
+            raise IncompatibleBotException(self,
+                                           "Grid bots can only be instantiated with exitTrigger of the type NO_EXIT")
+        if self.strategy.getName() == StrategiesIDs.GRID and self.stopLossType.getName() != StopLossesIDs.NO_STOP:
+            raise IncompatibleBotException(self, "Grid bots should have stopLossType always set as NO_STOP")
 
 # OBSERVACAO 1: BOTS biased=true e BOTS biased=false
 

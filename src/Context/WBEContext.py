@@ -24,10 +24,10 @@ class WBEContext:
         pass
 
     def createMarketReaders(self):
-        assetList = []
-        timeframeList = []
+        asset_list = []
+        timeframe_list = []
         for bot_guid in self.activeBots.inventory:
             assetList.append(self.activeBots.getBotById(bot_guid).asset)
-            timeframeList.append(self.activeBots.getBotById(bot_guid).timeframe)
+            timeframe_list.append(self.activeBots.getBotById(bot_guid).timeframe)
 
 

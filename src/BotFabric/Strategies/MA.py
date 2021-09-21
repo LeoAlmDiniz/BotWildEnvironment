@@ -1,3 +1,5 @@
+from numpy import NaN
+
 from src.BotFabric.Enums.StrategiesIDs import StrategiesIDs
 from src.BotFabric.Interfaces.IStrategy import IStrategy
 
@@ -8,8 +10,12 @@ class MA(IStrategy):
         self.name = StrategiesIDs.MA
         self.period = period
 
-    def getName(self):
+    def getName(self) -> StrategiesIDs:
         return self.name
+
+    def setBiasStrategy(self, strategy: IStrategy):
+        self.biasStrategy = strategy
 
     def longestPeriod(self):
         return max(self.period, 1)
+

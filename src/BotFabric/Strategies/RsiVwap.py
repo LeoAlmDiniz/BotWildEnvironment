@@ -9,8 +9,11 @@ class RsiVwap(IStrategy):
         self.period = period
         self.anchor = anchor
 
-    def getName(self):
+    def getName(self) -> StrategiesIDs:
         return self.name
+
+    def setBiasStrategy(self, strategy: IStrategy):
+        self.biasStrategy = strategy
 
     def longestPeriod(self):
         return max(self.period, 1)
