@@ -6,14 +6,14 @@ from src.BotFabric.Enums.Biases import Biases
 from src.BotFabric.Enums.Orders import Orders
 from src.BotFabric.Enums.StrategiesIDs import StrategiesIDs
 from src.BotFabric.Interfaces.IStrategy import IStrategy
-from src.BotFabric.StrategiesOrchestrator.WbeTechnicalAnalysis import WbeTechnicalAnalysis
+from src.BotFabric.Utils.WbeTechnicalAnalysis import WbeTechnicalAnalysis
 
 
 class EMA(IStrategy):
 
     def __init__(self, period=200):
         super().__init__()
-        self.name = StrategiesIDs.MA
+        self.name = StrategiesIDs.EMA
         self.period = period
         self.lastEma = NaN
         self.ema = NaN
@@ -43,9 +43,11 @@ class EMA(IStrategy):
             self.biasSteer = Biases.CRAB
 
     def updateOrderSteer(self, dataset: list):
-        if self.biasStrategy.biasSteer == Biases.BULL and self.ema > dataset[0] >= self.lastEma:
+        if self.biasStrategy.biasSteer == Biases.BULL and WbeTechnicalAnalysis.crossover(dataset[0], dataset[1],
+                                                                                         self.ema, self.lastEma):
             self.orderSteer = Orders.BUY
-        elif self.biasStrategy.biasSteer == Biases.BEAR and self.ema < dataset[0] <= self.lastEma:
+        elif self.biasStrategy.biasSteer == Biases.BEAR and WbeTechnicalAnalysis.crossunder(dataset[0], dataset[1],
+                                                                                            self.ema, self.lastEma):
             self.orderSteer = Orders.SELL
         else:
             self.orderSteer = Orders.NONE

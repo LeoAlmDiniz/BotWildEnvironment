@@ -24,7 +24,6 @@ class Bot:
                  stopLossType: IStopLoss,
                  exitTrigger: IExitTrigger,
                  maxPyramiding: int):
-
         # BLUEPRINT
         self.guid = uuid.uuid4()
         self.strategy = strategy

@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class StopLossesIDs(Enum):
-    NO_STOP = "No stop loss"
-    UNTRAILING_STOP = "Fixed stop loss"
-    TRAILING_STOP = "Moving stop loss"
+    NO_STOP = "NO_STOP"
+    UNTRAILING_STOP = "FIXED STOP LOSS"
+    TRAILING_STOP = "TRAILING STOP LOSS"
 
 

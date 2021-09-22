@@ -2,9 +2,13 @@ from enum import Enum
 
 
 class StrategiesIDs(Enum):
-    RSIVWAP = "Rsi of Vwap"
-    GRID = "Grid"
-    MA = "Price is above one MA"
-    MA2 = "2-Simple Moving Averages Cross"
-    MA3 = "3-Simple Moving Averages Cross"
+    RSIVWAP = "RSIVWAP"
+    GRID = "GRID"
+    MA = "MA"
+    MA2 = "MA2"
+    MA3 = "MA3"
+    EMA = "EMA"
+    EMA2 = "EMA2"
+    EMA3 = "EMA3"
+
 
